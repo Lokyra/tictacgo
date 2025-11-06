@@ -1,8 +1,6 @@
 package main
 
-import "fmt"
-
-func displayBoard(arr [3][3]int) {
+func printBoard(arr [3][3]string) {
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
 			print(arr[i][j])
@@ -11,28 +9,57 @@ func displayBoard(arr [3][3]int) {
 	}
 }
 
-// [0, 0, 0]
-// [0, 0, 0]
-// [0, 0, 0]
+func checkDiagonals(arr [3][3]string) bool {
+	if arr[0][0] == arr[1][1] && arr[1][1] == arr[2][2] && arr[0][0] != "" {
+		return true
+	}
+	if arr[0][2] == arr[1][1] && arr[1][1] == arr[2][0] && arr[0][2] != "" {
+		return true
+	}
+	return false
+}
+
+func checkHorizontals(arr [3][3]string) bool {
+	if arr[0][0] == arr[0][1] && arr[0][1] == arr[0][2] && arr[0][0] != "" {
+		return true
+	}
+	if arr[1][0] == arr[1][1] && arr[1][1] == arr[1][2] && arr[1][0] != "" {
+		return true
+	}
+	if arr[2][0] == arr[2][1] && arr[2][1] == arr[2][2] && arr[2][0] != "" {
+		return true
+	}
+	return false
+}
+
+func checkVerticals(arr [3][3]string) bool {
+	if arr[0][0] == arr[1][0] && arr[1][0] == arr[2][0] && arr[0][0] != "" {
+		return true
+	}
+	if arr[0][1] == arr[1][1] && arr[1][1] == arr[2][1] && arr[0][1] != "" {
+		return true
+	}
+	if arr[0][1] == arr[1][2] && arr[1][2] == arr[2][2] && arr[0][1] != "" {
+		return true
+	}
+	return false
+}
+
+func displayBoard() {
+
+}
+
+// 0 | 0 | 0 |
+// 0 | 0 | 0 |
+// 0 | 0 | 0 |
 
 func main() {
-	fmt.Println("Hello, world!")
+	println("Welcome to TicTacToe Game")
 
-	var first bool
-	first = true
+	//board := [3][3]string{{"", "", ""}, {"", "", ""}, {"", "", ""}}
+	boardTest := [3][3]string{{"X", "X", "O"}, {"", "", ""}, {"", "", ""}}
 
-	second := false
-
-	fmt.Println(first, second)
-	array := [3]int{1, 2, 3}
-
-	for _, value := range array {
-		fmt.Print(value)
-	}
-	println()
-
-	matrix := [3][3]int{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
-
-	displayBoard(matrix)
+	res := checkHorizontals(boardTest)
+	println(res)
 
 }
