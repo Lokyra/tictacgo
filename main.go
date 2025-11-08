@@ -7,9 +7,11 @@ import (
 
 func putSymbol(arr *[3][3]string, symbol string, x *int, y *int) int {
 	if arr[*x][*y] != "_" {
+		println("Already Taken")
 		return -1
 	}
 	arr[*x][*y] = symbol
+	println("The symbol was put")
 	return 1
 }
 
@@ -39,37 +41,54 @@ func askCoordinates(x *int, y *int) {
 	*y = b
 }
 
+func checkWin(arr *[3][3]string, player string) bool {
+	res := false
+	res = checkDiagonals(arr)
+	if res == true {
+		println(player, "have won the game !")
+		return !res
+	}
+	res = checkHorizontals(arr)
+	if res == true {
+		println(player, "has won the game !")
+		return !res
+	}
+	res = checkVerticals(arr)
+
+	return !res
+}
+
 func checkDiagonals(arr *[3][3]string) bool {
-	if arr[0][0] == arr[1][1] && arr[1][1] == arr[2][2] && arr[0][0] != "" {
+	if arr[0][0] == arr[1][1] && arr[1][1] == arr[2][2] && arr[0][0] != "_" {
 		return true
 	}
-	if arr[0][2] == arr[1][1] && arr[1][1] == arr[2][0] && arr[0][2] != "" {
-		return true
-	}
-	return false
-}
-
-func checkHorizontals(arr [3][3]string) bool {
-	if arr[0][0] == arr[0][1] && arr[0][1] == arr[0][2] && arr[0][0] != "" {
-		return true
-	}
-	if arr[1][0] == arr[1][1] && arr[1][1] == arr[1][2] && arr[1][0] != "" {
-		return true
-	}
-	if arr[2][0] == arr[2][1] && arr[2][1] == arr[2][2] && arr[2][0] != "" {
+	if arr[0][2] == arr[1][1] && arr[1][1] == arr[2][0] && arr[0][2] != "_" {
 		return true
 	}
 	return false
 }
 
-func checkVerticals(arr [3][3]string) bool {
-	if arr[0][0] == arr[1][0] && arr[1][0] == arr[2][0] && arr[0][0] != "" {
+func checkHorizontals(arr *[3][3]string) bool {
+	if arr[0][0] == arr[0][1] && arr[0][1] == arr[0][2] && arr[0][0] != "_" {
 		return true
 	}
-	if arr[0][1] == arr[1][1] && arr[1][1] == arr[2][1] && arr[0][1] != "" {
+	if arr[1][0] == arr[1][1] && arr[1][1] == arr[1][2] && arr[1][0] != "_" {
 		return true
 	}
-	if arr[0][1] == arr[1][2] && arr[1][2] == arr[2][2] && arr[0][1] != "" {
+	if arr[2][0] == arr[2][1] && arr[2][1] == arr[2][2] && arr[2][0] != "_" {
+		return true
+	}
+	return false
+}
+
+func checkVerticals(arr *[3][3]string) bool {
+	if arr[0][0] == arr[1][0] && arr[1][0] == arr[2][0] && arr[0][0] != "_" {
+		return true
+	}
+	if arr[0][1] == arr[1][1] && arr[1][1] == arr[2][1] && arr[0][1] != "_" {
+		return true
+	}
+	if arr[0][1] == arr[1][2] && arr[1][2] == arr[2][2] && arr[0][1] != "_" {
 		return true
 	}
 	return false
@@ -85,27 +104,31 @@ func displayBoard(arr *[3][3]string) {
 func gameLoop(arr *[3][3]string) {
 	userSymbol := "X"
 	computerSymbol := "O"
-	var x, y *int
-	var a int
+	var x, y int
 	res := -1
-	x = &a
-	y = &a
 
-	for res == -1 {
-		askCoordinates(x, y)
-		res = putSymbol(arr, userSymbol, x, y)
-	}
-	println("Player's Play")
-	displayBoard(arr)
+	running := true
 
-	res = -1
-	for res == -1 {
-		askComputerCoords(x, y)
-		res = putSymbol(arr, computerSymbol, x, y)
+	for running {
+
+		for res == -1 {
+			askCoordinates(&x, &y)
+			res = putSymbol(arr, userSymbol, &x, &y)
+		}
+		println("Player's Play")
+		displayBoard(arr)
+		running = checkWin(arr, "You")
+
+		res = -1
+		for res == -1 {
+			askComputerCoords(&x, &y)
+			res = putSymbol(arr, computerSymbol, &x, &y)
+		}
+		println("Computer's Play")
+		displayBoard(arr)
+		running = checkWin(arr, "The Computer")
+		res = -1
 	}
-	println("Computer's Play")
-	displayBoard(arr)
-	res = -1
 }
 
 func main() {
